@@ -39,6 +39,15 @@
             </div>
             <span class="tip setting-help">Add a download link for the source file of your PDF. Use it for example to provide the PowerPoint file used to create this PDF.</span>
         </li>
+        <li class="field comp-setting-entry is-set">
+            <div class="wrapper-comp-setting">
+                <label class="label setting-label" for="pdf_edit_view_type">View Type</label>
+                <select class="input setting-input" id="pdf_edit_view_type">
+                    <option value="general" {% if view_type == 'general' %}selected{% endif %}>General</option>
+                    <option value="flipbook" {% if view_type == 'flipbook' %}selected{% endif %}>Flipbook</option>
+                </select>
+            </div>
+        </li>
         
     </ul>
     

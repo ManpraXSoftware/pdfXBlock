@@ -41,6 +41,9 @@ class pdfXBlock(XBlock):
         default="",
         scope=Scope.content,
         help="Add a download link for the source file of your PDF. Use it for example to provide the PowerPoint file used to create this PDF.")
+    view_type = String(display_name="View Type",
+        default="general",
+        scope=Scope.content)
 
     '''
     Util functions
@@ -49,8 +52,9 @@ class pdfXBlock(XBlock):
         """
         Gets the content of a resource
         """
-        resource_content = pkg_resources.resource_string(__name__, resource_path)
-        return unicode(resource_content)
+        # resource_content = pkg_resources.resource_string(__name__, resource_path)
+        resource_content = pkg_resources.resource_string(__name__, resource_path).decode('utf-8')
+        return resource_content
 
     def render_template(self, template_path, context={}):
         """
@@ -73,7 +77,8 @@ class pdfXBlock(XBlock):
             'url': self.url,
             'allow_download': self.allow_download,
             'source_text': self.source_text,
-            'source_url': self.source_url
+            'source_url': self.source_url,
+            'view_type':self.view_type
         }
         html = self.render_template('static/html/pdf_view.html', context)
 
@@ -93,7 +98,8 @@ class pdfXBlock(XBlock):
             'url': self.url,
             'allow_download': self.allow_download,
             'source_text': self.source_text,
-            'source_url': self.source_url
+            'source_url': self.source_url,
+            'view_type':self.view_type
         }
         html = self.render_template('static/html/pdf_edit.html', context)
 
@@ -112,6 +118,7 @@ class pdfXBlock(XBlock):
         self.allow_download = True if data['allow_download'] == "True" else False # Str to Bool translation
         self.source_text = data['source_text']
         self.source_url = data['source_url']
+        self.view_type = data['view_type']
 
         return {
             'result': 'success',
@@ -123,5 +130,6 @@ class pdfXBlock(XBlock):
         Make sure to include `student_view_data=scorm` to URL params in the request.
         """
         return {'last_modified': self.allow_download,
-                'scorm_data': self.url
+                'scorm_data': self.url,
+                'view_type':self.view_type
         }
